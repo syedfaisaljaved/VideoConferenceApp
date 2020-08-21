@@ -3,4 +3,10 @@
     <string name="room_id">Enter Room Id</string>
     <string name="create_join_room">Join/Create Room</string>
     <string name="setting">Setting</string>
+    <string name="videocall">Video Call</string>
+    <string name="audiocall">Audio Call</string>
+    <string name="video_on">Video ON</string>
+    <string name="video_off">Video OFF</string>
+    <string name="mic_on">Mic ON</string>
+    <string name="mic_off">Mic OFF</string>
 </resources>

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
 import org.jitsi.meet.sdk.JitsiMeet;
@@ -34,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Ui components
     private EditText mRoomId;
     private Button mButton;
+    private SwitchCompat mAudioVideoSwitch, mVideoOnOffSwitch, mMicOnOffSwitch;
+
+    //vars
+    private Boolean bool1, bool2, bool3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mRoomId = findViewById(R.id.room_etv);
         mButton = findViewById(R.id.button);
+        mAudioVideoSwitch = findViewById(R.id.videoaudio_switch);
+        mVideoOnOffSwitch = findViewById(R.id.video_switch);
+        mMicOnOffSwitch = findViewById(R.id.mic_switch);
+
 
         init();
         setClickListeners();
@@ -103,14 +112,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startVideoActivity() {
         String roomId = mRoomId.getText().toString().trim();
+        configureSettings();
 
         try {
             JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL("https://meet.jit.si"))
                     .setRoom(roomId)
-                    .setAudioMuted(false)
-                    .setVideoMuted(false)
-                    .setAudioOnly(false)
+                    .setAudioMuted(bool1)
+                    .setVideoMuted(bool2)
+                    .setAudioOnly(bool3)
                     .setWelcomePageEnabled(false)
                     .build();
 
@@ -122,6 +132,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void configureSettings() {
+        if (mAudioVideoSwitch.isChecked()){
+            bool3 = true;
+        }
+        else {
+            bool3 = false;
+        }
+        if (mVideoOnOffSwitch.isChecked()){
+            bool2 = true;
+        }
+        else {
+            bool2 = false;
+        }
+        if (mMicOnOffSwitch.isChecked()){
+            bool1 = true;
+        }
+        else {
+            bool1 = false;
         }
     }
 

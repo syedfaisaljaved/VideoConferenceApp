@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Video Conference App</string>
+    <string name="room_id">Enter Room Id</string>
+    <string name="create_join_room">Join/Create Room</string>
+    <string name="setting">Setting</string>
+</resources>

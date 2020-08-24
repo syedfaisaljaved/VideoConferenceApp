@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,9 @@ import org.jitsi.meet.sdk.JitsiMeetUserInfo;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener, CompoundButton.OnCheckedChangeListener {
+
+    private static final String TAG = "MainActivity";
 
     //Ui components
     private EditText mRoomId;
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SwitchCompat mAudioVideoSwitch, mVideoOnOffSwitch, mMicOnOffSwitch;
 
     //vars
-    private Boolean bool1, bool2, bool3;
+    private Boolean bool1 = false, bool2 = false, bool3 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mVideoOnOffSwitch = findViewById(R.id.video_switch);
         mMicOnOffSwitch = findViewById(R.id.mic_switch);
 
-
         init();
         setClickListeners();
 //        checkPermissions();
+
     }
 
     private void init() {
@@ -74,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setClickListeners() {
         mButton.setOnClickListener(this);
         mRoomId.setOnEditorActionListener(this);
+        mVideoOnOffSwitch.setOnCheckedChangeListener(this);
+        mMicOnOffSwitch.setOnCheckedChangeListener(this);
+        mAudioVideoSwitch.setOnCheckedChangeListener(this);
     }
 //
 //    public void checkPermissions(){
@@ -112,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startVideoActivity() {
         String roomId = mRoomId.getText().toString().trim();
-        configureSettings();
 
         try {
             JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
@@ -135,27 +140,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void configureSettings() {
-        if (mAudioVideoSwitch.isChecked()){
-            bool3 = true;
-        }
-        else {
-            bool3 = false;
-        }
-        if (mVideoOnOffSwitch.isChecked()){
-            bool2 = true;
-        }
-        else {
-            bool2 = false;
-        }
-        if (mMicOnOffSwitch.isChecked()){
-            bool1 = true;
-        }
-        else {
-            bool1 = false;
-        }
-    }
-
     @Override
     public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
         if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -164,4 +148,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+        switch (compoundButton.getId()){
+            case R.id.videoaudio_switch:
+                if (isChecked){
+                    bool3 = true;
+                    mVideoOnOffSwitch.setChecked(isChecked);
+                    mAudioVideoSwitch.setChecked(isChecked);
+                }else {
+                    bool3 = false;
+                }
+                break;
+            case R.id.video_switch:
+                if (isChecked){
+                    bool2 = true;
+                }
+                else {
+                    bool2 = false;
+                    mAudioVideoSwitch.setChecked(false);
+                }
+                break;
+            case R.id.mic_switch:
+                if (isChecked){
+                    bool1 = true;
+                }
+                else {
+                    bool1 = false;
+                }
+                break;
+        }
+    }
 }
